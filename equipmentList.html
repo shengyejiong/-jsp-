@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>system</title>
+    <style>
+
+    .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    body
+    {
+        background-image:url('image1.png');
+    } 
+
+    table,td,th
+    {
+      border: 1px solid green;
+    }
+    th
+    {
+      background-color: green;
+      color: lavender;
+    }
+
+    a:link,a:visited
+    {
+      display:block;
+      font-weight:bold;
+      color:#FFFFFF;
+      background-color:#98bf21;
+      width:120px;
+      text-align:center;
+      padding:4px;
+      text-decoration:none;
+    }
+    a:hover,a:active
+    {
+      background-color:#7A991A;
+    }
+
+    input[type=text], select {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+}
+
+    </style>
+</head>
+
+<script type="text/javascript">
+
+    var a = 0;//定义一个判断全局变量
+
+
+    //点击修改在下方表单显示
+    function updatel(obj){
+      var newname = document.getElementById('portname');
+      var device = document.getElementById('devicename');
+      var bianma = document.getElementById('num');
+      var fenglei = document.getElementById('vary');
+      var leixing = document.getElementById('check');
+      var anzhuang = document.getElementById('installtime');
+      var zhuangtai = document.getElementById('now');
+
+      var oTr = obj.parentNode.parentNode;
+      var aTd = oTr.getElementsByTagName("td");
+      
+      rowIndex = obj.parentNode.parentNode.rowIndex;//获取行数
+
+      newname.value = aTd[0].innerHTML;
+      device.value = aTd[1].innerHTML;
+      bianma.value = aTd[2].innerHTML;
+      fenglei.value = aTd[3].innerHTML;
+      leixing.value = aTd[4].innerHTML;
+      anzhuang.value = aTd[5].innerHTML;
+      zhuangtai.value = aTd[6].innerHTML;
+
+      console.log(aTd[1].innerHTML);
+
+      a = 1;
+    }
+
+    function isLoopYear(x){
+
+      if((x%4==0 && x%100!=0)||(x%100==0 && x%400==0)){
+       return 1;
+      }else{
+         return 0;
+      }
+
+
+    }
+
+
+    
+
+    //超链接删除函数
+    function deletel(obj){
+        var oParentnode = obj.parentNode.parentNode;//选取父级对象
+        var olistTable = document.getElementById('tbody1');
+        olistTable.removeChild(oParentnode);
+        
+    }
+
+    //超链接 修改
+    
+    
+
+    function timeinputalarm(){
+
+//添加数据函数 
+
+          var newname = document.getElementById('portname').value;
+          var device = document.getElementById('devicename').value;
+          var bianma = document.getElementById('num').value;
+          var fenglei = document.getElementById('vary').value;
+          var leixing = document.getElementById('check').value;
+          var anzhuang = document.getElementById('installtime').value;
+          var zhuangtai = document.getElementById('now').value;
+
+
+          if(device == ""){
+            alert("设备名称不能为空！")
+            return false;
+          }
+
+          if(bianma == ""){
+            alert("设备编码不能为空！")
+            return false;
+          }
+
+          var strinputdate=document.forms["table2"]["installtime"].value;
+          var DA = [0,31,28,31,30,31,30,31,31,30,31,30,31];
+          var strdate = strinputdate.replace(/-/g,"/");// /g代表全局,即全部都要替换 双引号里则是替换后的字符
+
+
+
+
+          //解决格式不是年月日的情况
+          if(strdate.indexOf("/") == -1){
+            alert("安装时间格式必须是yyyy-MM-dd HH:mm:ss")
+            return false;
+          }
+
+          //检查时间
+          if(strdate.indexOf(":") == -1){
+            alert("时间格式错误！（请检查是否输入的是英文冒号）")
+            return false;
+          }
+
+          main = strdate.split(" ");
+          //解决有一个中文冒号或者格式错误的情况
+          arrt = main[1].split(":");
+
+          if(arrt.length!=3){
+            alert("时间格式错误！（请检查是否输入的是英文冒号）")
+            return false
+          }
+
+
+          //分解年月日 解决年月日不齐的情况
+          arrD = main[0].split("/");
+          if(arrD.length!=3){
+            alert("安装时间格式必须是yyyy-MM-dd HH:mm:ss")
+            return false
+          }
+
+
+
+          y = parseInt(arrD[0],10);
+          m = parseInt(arrD[1],10);
+          d = parseInt(arrD[2],10);//把日期转换为整数
+
+          //解决日期中输入字母的情况
+          if(isNaN(arrD[0])||isNaN(arrD[1])||isNaN(arrD[2])){
+            alert("日期只能是数字！")
+            return false;
+          }
+
+          //月份是否在1-12之间
+          if(m>12||m<1){
+            alert("月份错误！")
+            return false;
+          }
+
+          //判断闰年
+          if(isLoopYear(y))DA[2] = 29;
+
+          //判断输入天数是否超过当月总天数
+          if(d > DA[m]){
+            alert("日期错误！")
+            return false;
+          }
+
+
+          var oTr = document.createElement('tr');//创建tr td
+
+          var oTd1 = document.createElement('td'); 
+          oTd1.innerHTML = newname;
+          var oTd2 = document.createElement('td');
+          oTd2.innerHTML = device;
+          var oTd3 = document.createElement('td');
+          oTd3.innerHTML = bianma;
+          var oTd4 = document.createElement('td');
+          oTd4.innerHTML = fenglei;
+          var oTd5 = document.createElement('td');
+          oTd5.innerHTML = leixing;
+          var oTd6 = document.createElement('td');
+          oTd6.innerHTML = anzhuang;
+          var oTd7 = document.createElement('td');
+          oTd7.innerHTML = zhuangtai;
+          //最后一列的操作
+
+          var oTd8; 
+          oTd8 = document.createElement("td");
+          oTd8.innerHTML = "<a href='javascript:;'onclick = updatel(this)>修改</a>" +
+                " <a href='javascript:;'onclick = deletel(this)>删除</a>";
+
+
+          oTr.appendChild(oTd1);
+          oTr.appendChild(oTd2);
+          oTr.appendChild(oTd3);
+          oTr.appendChild(oTd4);
+          oTr.appendChild(oTd5);
+          oTr.appendChild(oTd6);
+          oTr.appendChild(oTd7);
+          oTr.appendChild(oTd8);
+          var olistTable = document.getElementById('tbody1');
+          olistTable.appendChild(oTr);
+
+
+
+}
+
+
+    function update(){
+      var newname = document.getElementById('portname');
+      var device = document.getElementById('devicename');
+      var bianma = document.getElementById('num');
+      var fenglei = document.getElementById('vary');
+      var leixing = document.getElementById('check');
+      var anzhuang = document.getElementById('installtime');
+      var zhuangtai = document.getElementById('now');
+
+      var omytable = document.getElementById("myTable");
+
+      console.log(omytable.rows[1].cells)//输出位置内容防止对应不正确
+      omytable.rows[rowIndex].cells[0].innerHTML = newname.value;
+      omytable.rows[rowIndex].cells[1].innerHTML = device.value;
+      omytable.rows[rowIndex].cells[2].innerHTML = bianma.value;
+      omytable.rows[rowIndex].cells[3].innerHTML = fenglei.value;
+      omytable.rows[rowIndex].cells[4].innerHTML = leixing.value;
+      omytable.rows[rowIndex].cells[5].innerHTML = anzhuang.value;
+      omytable.rows[rowIndex].cells[6].innerHTML = zhuangtai.value;
+
+
+    }
+
+
+    function baocun(){
+      if(a==0){
+        return timeinputalarm();
+      }
+      else{
+        a = 0;
+        return update();
+        
+      }
+
+    }
+
+    
+
+</script>
+
+
+<body>
+
+    <table id="myTable" border="1" width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#cccccc" class="tabtop13" align="center">
+        <tbody>
+            
+            <thead>
+          <tr>
+            <th colspan="1" class="btbg font-center titfont" rowspan="2">站点名称</th>
+            <th width="10%" class="btbg font-center titfont" rowspan="2">设备名称</th>
+            <th width="10%" class="btbg font-center titfont" rowspan="2">设备编码</th>
+            <th width="10%" class="btbg font-center titfont" rowspan="2">设备分类</th>
+            <th>设备类型</th>
+            <th>安装时间<br></th>
+            <th>设备状态</th>
+            <th>操作</th>
+          </tr>
+          
+            </thead>
+
+        <tbody id="tbody1">
+          <tr>
+            <td>昌都生态监测站</td>
+            <td>冻土设备01</td>
+            <td>XZ001</td>
+            <td>土壤</td>
+            <td>冻土检测</td>
+            <td>2021-05-18 16:53:42</td>
+            <td>正常</td>
+            <td><a href="javascript:;" onclick = updatel(this)>修改</a>
+              <a href="javascript:;" onclick = deletel(this)>删除</a></td>
+          </tr>
+          <tr>
+            <td>昌都生态监测站</td>
+            <td>冻土设备04</td>
+            <td>XZ004</td>
+            <td>土壤</td>
+            <td>冻土检测</td>
+            <td>2021-05-17 16:54:08</td>
+            <td>正常</td>
+            <td><a href="javascript:;" onclick = updatel(this)>修改</a>
+              <a href="javascript:;" onclick = deletel(this)>删除</a></td>
+          </tr>
+          <tr>
+            <td>申扎生态监测站</td>
+            <td>设备1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>2021-04-01 10:09:11</td>
+            <td>正常</td>
+            <td><a href="javascript:;" onclick = updatel(this)>修改</a>
+              <a href="javascript:;" onclick = deletel(this)>删除</a></td>
+          </tr>
+          <tr>
+            <td>日喀则生态监测站</td>
+            <td>设备4</td>
+            <td>4</td>
+            <td>4</td>
+            <td>4</td>
+            <td>2021-03-30 10:16:04</td>
+            <td>正常</td>
+            <td><a href="javascript:;" onclick = updatel(this)>修改</a>
+              <a href="javascript:;" onclick = deletel(this)>删除</a></td>
+          </tr>
+          <tr>
+            <td>定日生态监测站</td>
+            <td>设备3</td>
+            <td>3</td>
+            <td>3</td>
+            <td>3</td>
+            <td>2021-03-29 10:11:23</td>
+            <td>正常</td>
+            <td><a href="javascript:;" onclick = updatel(this)>修改</a>
+              <a href="javascript:;" onclick = deletel(this)>删除</a></td>
+          </tr>
+          <tr>
+            <td>山南生态观测站</td>
+            <td>设备10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>2021-03-24 10:34:19</td>
+            <td>正常</td>
+            <td><a href="javascript:;" onclick = updatel(this)>修改</a>
+              <a href="javascript:;" onclick = deletel(this)>删除</a></td>
+          </tr>
+          <tr>
+            <td>那曲生态监测站</td>
+            <td>设备9</td>
+            <td>9</td>
+            <td>9</td>
+            <td>9</td>
+            <td>2021-03-23 10:33:35</td>
+            <td>正常</td>
+            <td><a href="javascript:;" onclick = updatel(this)>修改</a>
+              <a href="javascript:;" onclick = deletel(this)>删除</a></td>
+          </tr>
+          <tr>
+            <td>改则生态监测站</td>
+            <td>设备2</td>
+            <td>2</td>
+            <td>2</td>
+            <td>2</td>
+            <td>2021-03-17 10:10:27</td>
+            <td>正常</td>
+            <td><a href="javascript:;" onclick = updatel(this)>修改</a>
+              <a href="javascript:;" onclick = deletel(this)>删除</a></td>
+          </tr>
+          <tr>
+            <td>芒康生态监测站</td>
+            <td>设备7</td>
+            <td>7</td>
+            <td>7</td>
+            <td>7</td>
+            <td>2021-03-16 10:32:19</td>
+            <td>正常</td>
+            <td><a href="javascript:;" onclick = updatel(this)>修改</a>
+              <a href="javascript:;" onclick = deletel(this)>删除</a></td>
+          </tr>
+          
+        </tbody>
+        
+      </table>
+      <br/><br/>
+
+      <h2>新增</h2>
+
+      
+      <form name="table2"  method="post">
+
+          <tr>
+          <th>站点名称(*)</th>
+          <select name="站点名称" id="portname">
+            <td><option value="昌都生态监测站" selected>昌都生态监测站</td>
+            <td><option value="申扎生态监测站" >申扎生态监测站</td>
+            <td><option value="日喀则生态监测站" >日喀则生态监测站</td>
+            <td><option value="定日生态监测站" >定日生态监测站</td>
+            <td><option value="山南生态观测站" >山南生态观测站</td>
+            <td><option value="那曲生态监测站" >那曲生态监测站</td>
+            <td><option value="改则生态监测站" >改则生态监测站</td>
+            <td><option value="芒康生态监测站" >芒康生态监测站</td>
+          </select>
+          </tr>
+          <br>
+
+          <tr>
+          <th>设备名称(*)</th>
+          <td><input type="text" id="devicename"/></td>
+          <br>
+          </tr>
+        
+          <tr>
+          <td>设备编码(*)</td>
+          <td><input type="text" id="num"/></td>
+          <br></tr>
+
+          <tr>
+          <td>设备分类</td>
+          <select name="设备分类" id="vary">
+            <td><option value="土壤" selected>土壤</td>
+            <td><option value="1" >1</td> 
+            <td><option value="2" >2</td>
+            <td><option value="3" >3</td>
+            <td><option value="4" >4</td>
+            <td><option value="5" >5</td>
+            <td><option value="6" >6</td>
+            <td><option value="7" >7</td>
+            <td><option value="8" >8</td>
+            <td><option value="9" >9</td>
+            <td><option value="10" >10</td>
+          
+          </select>
+          </tr>
+          <br>
+
+          <tr>
+          <td>设备类型</td>
+          <select name="冻土检测" id="check">
+          <td><option value="冻土检测" selected>冻土检测</td>
+            <td><option value="1" >1</td> 
+            <td><option value="2" >2</td>
+            <td><option value="3" >3</td>
+            <td><option value="4" >4</td>
+            <td><option value="5" >5</td>
+            <td><option value="6" >6</td>
+            <td><option value="7" >7</td>
+            <td><option value="8" >8</td>
+            <td><option value="9" >9</td>
+            <td><option value="10" >10</td>
+          </select>
+          </tr> <br>
+
+          <tr>
+          <td>安装时间</td>
+          <td><input type="text" id="installtime"></td>
+          </tr><br>
+
+          <tr>
+          <td>设备状态</td>
+          <select name="状态" id="now">
+            <td><option value="正常" selected>正常</td>
+            <td><option value="损坏" >损坏</td> 
+          </select>
+          </tr><br>
+
+          <tr>
+            <td colspan="2">
+          <input type="reset" value="取消" class="button" id="reset">
+          <input type="button" value="保存" class="button" id="add" onclick="baocun()">
+          </td>
+          </tr> <br>
+
+
+      </form>  
+      
+    
+
+    
+</body>
+
+
+    
+</html>
